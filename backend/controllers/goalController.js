@@ -20,9 +20,12 @@ const setGoal = asyncHandler(async (req,res) =>{
         res.status(400)
         throw new Error ('please add a text filed')
     }
+    
+    const goal =await Goal.create({
+        text:req.body.text
+    })
 
-
-    res.status(200).json({message:'set goal'})
+    res.status(200).json(goal)
 })
 
 // @desc update goals 
@@ -30,7 +33,19 @@ const setGoal = asyncHandler(async (req,res) =>{
 // @access Private 
 
 const updateGoal = asyncHandler(async (req,res) =>{
-    res.status(200).json({message:`update goals ${req.params.id}`})
+
+    const goal= await Goal.findById(req.params.id)
+
+    if(!goal){
+       res.status(400) 
+       throw new console.error('goal not found');
+       
+    }
+    const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.
+        body,{
+            new:true,
+        })
+    res.status(200).json(updatedGoal)
 })
 
 // @desc Delete goals 
